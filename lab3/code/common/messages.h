@@ -118,22 +118,22 @@ void send_file_info_and_data(struct file_info_and_data fiad, int s, struct socka
 
 }
 
-void send_data(struct data, int s, struct sockaddr_storage sin){
+void send_data(struct data d, int s, struct sockaddr_storage sin){
     // msgbuf holds actual message
     // outbuf is being used as pointer to fill the locations
     void *msgbuf, *outbuf;
 
-    int total_size = sizeof(fiad.type) + sizeof(fiad.sequence_number) + sizeof(fiad.block_size) 
-                        + fiad.block_size;
+    int total_size = sizeof(d.type) + sizeof(d.sequence_number) + sizeof(d.block_size) 
+                        + d.block_size;
 
     msgbuf = outbuf = malloc(total_size);
-    memcpy(outbuf, &fiad.type, sizeof(fiad.type));
-    outbuf+=sizeof(fiad.type);
-    memcpy(outbuf, &fiad.sequence_number, sizeof(fiad.sequence_number));
-    outbuf+=sizeof(fiad.sequence_number);
-    memcpy(outbuf, &fiad.block_size, sizeof(fiad.block_size));
-    outbuf+=sizeof(fiad.block_size);
-    memcpy(outbuf, fiad.data, fiad.block_size);
+    memcpy(outbuf, &d.type, sizeof(d.type));
+    outbuf+=sizeof(d.type);
+    memcpy(outbuf, &d.sequence_number, sizeof(d.sequence_number));
+    outbuf+=sizeof(d.sequence_number);
+    memcpy(outbuf, &d.block_size, sizeof(d.block_size));
+    outbuf+=sizeof(d.block_size);
+    memcpy(outbuf, d.data, d.block_size);
 
     printf("Sending message with data to client\n");
 
