@@ -33,8 +33,7 @@ int main(int argc, char * argv[])
     char clientIP[INET_ADDRSTRLEN]; /* For IPv4 addresses */
 	socklen_t client_addr_len;
 	char buf[BUF_SIZE];
-	int len;
-	int s;
+	int len, s;
 	char *host;
 	struct hostent *hp;
     uint8_t rec_type; 
@@ -113,17 +112,33 @@ int main(int argc, char * argv[])
 
 
             // Check if file exists
-            f = fopen(filename, "r");
+            FILE* f = fopen(filename, "r");
             if(f == NULL)
             {
                 // Send File Not Found
-
+                struct file_not_found fnf;
+                fnf.type = 4;
+                fnf.filename_size = strlen(filename);
+                fnf.filename = filename;
+                send_file_not_found(fnf, s, client_addr);
             }
             else{
                 // Set Filename and initialze sliding window parameters
-                
+                struct file_info_and_data fiad;
+                fiad.type = 2;
+                fiad.sequence_number = 0;
+                fiad.filename_size = strlen(filename);
+                fiad.filename = filename;
+                fseek(f, 0L, SEEK_END);
+                fiad.file_size = ftell(f);
+                fseek(f, 0, SEEK_SET);
+                fiad.block_size = 512;
+                //fread(temp_buf,1,10,f);
+                //TODO ADD READ DATA
+                fiad.data = "DUMMY DATA";
+                send_file_info_and_data(fiad, s, client_addr);
+                fclose(f);
             }   
-
             // Optional: Add code to serve multiple clients by forking (Reuse from LAB#2)
         }
         else if(rec_type == 1){

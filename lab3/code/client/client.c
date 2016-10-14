@@ -31,8 +31,8 @@ int main(int argc, char * argv[])
     struct sockaddr_in sin;
     char *host;
     char buf[BUF_SIZE];
-    int s;
-    int len;
+    int s, len;
+    uint8_t rec_type; 
 
     if ((argc==2)||(argc == 3)) 
     {
@@ -88,7 +88,17 @@ int main(int argc, char * argv[])
     send_file_request(fr, s, sin);
 
     /* wait for reply of file request and respond */
-    
+    printf("Waiting for response from server\n");
+    while( len = recv(s, buf, sizeof(buf), 0) > 0){ 
+        memcpy(&rec_type, buf, 1);
+        printf("Type: %d\n", rec_type);
+        if(rec_type == 4){
+            printf("File was not found on the server!\n");
+        }
+        else if(rec_type == 2){
+            printf("File was found\n");
+        }
+    }
     
     return 0;
 }
