@@ -1,3 +1,5 @@
+#define BLOCKSIZE 1024
+
 struct file_request
 {
     uint8_t type; // = 0
@@ -22,7 +24,7 @@ struct file_info_and_data
     char      *filename;
     uint32_t  file_size;
     uint16_t  block_size;
-    char      *data;
+    char      data[BLOCKSIZE];
 };
 
 struct data
@@ -30,7 +32,7 @@ struct data
     uint8_t   type; // = 3
     uint16_t  sequence_number;
     uint16_t  block_size;
-    char      *data;
+    char      data[BLOCKSIZE];
 };
 
 struct file_not_found
@@ -89,6 +91,11 @@ void send_file_info_and_data(struct file_info_and_data fiad, int s, struct socka
     int total_size = sizeof(fiad.type) + sizeof(fiad.sequence_number) + sizeof(fiad.filename_size) 
                         + fiad.filename_size + sizeof(fiad.file_size) + sizeof(fiad.block_size) 
                         + fiad.block_size;
+
+    //sequence_number, file_size, block_size need to be converted to Net Byte order
+    fiad.sequence_number = htons(fiad.sequence_number);
+    fiad.file_size = htonl(fiad.file_size);
+    fiad.block_size = htons(fiad.block_size);
 
     msgbuf = outbuf = malloc(total_size);
     memcpy(outbuf, &fiad.type, sizeof(fiad.type));

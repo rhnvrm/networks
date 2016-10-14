@@ -22,6 +22,7 @@
 
 #define SERVER_PORT 5432
 #define BUF_SIZE 90960
+#define BLOCKSIZE 1024
 
 int main(int argc, char * argv[])
 {
@@ -78,7 +79,8 @@ int main(int argc, char * argv[])
     }
 
     // TODO: Set using argument argv
-    char *filename = "sia.m4a";
+    //char *filename = "sia.m4a";
+    char *filename = "hello.txt";
 
     struct file_request fr;
     fr.type = 0;
@@ -98,10 +100,33 @@ int main(int argc, char * argv[])
         else if(rec_type == 2){
             printf("File was found\n");
 
-            //Parse the initial FIAD and set SWP parameters
+            //Parse the initial FIAD 
+            uint16_t rec_seq_no;
+            memcpy(&rec_seq_no, buf+1, 2);
+            rec_seq_no = ntohs(rec_seq_no); // Convert from Net to Host byte order
+            uint8_t rec_fname_size;
+            memcpy(&rec_fname_size, buf+3, 1);
+            printf("Filename Size: %d\n", rec_fname_size);
+            filename = malloc(rec_fname_size);
+            memcpy(filename, buf+4, rec_fname_size);
+            printf("Filename: %s\n", filename);
+            uint32_t rec_file_size;
+            memcpy(&rec_file_size, buf+4+rec_fname_size, 4);
+            rec_file_size = ntohl(rec_file_size);
+            printf("Filesize: %d Bytes\n", rec_file_size);
+            uint16_t block_size;
+            memcpy(&block_size, buf+4+rec_fname_size+4, 2);
+            block_size = ntohs(block_size);
+            printf("block_size: %d Bytes\n", block_size);
+            char rec_data[BLOCKSIZE];
+            memcpy(&rec_data, buf+4+rec_fname_size+4+2, block_size);
+            printf("DATA: %s\n", rec_data);
+            //set SWP parameters
+            unsigned long calc_frame_size = rec_file_size/block_size;
+            printf("Calculated frames = %ld\n", calc_frame_size);
 
             //Send initial ACK
-            struct ACK ack = {1, htons(10)};
+            struct ACK ack = {1, rec_seq_no};
             send_ack(ack, s, sin);
         }
     }

@@ -25,6 +25,7 @@
 
 #define SERVER_PORT 5432
 #define BUF_SIZE 90960
+#define BLOCKSIZE 1024
 
 int main(int argc, char * argv[])
 {
@@ -129,13 +130,11 @@ int main(int argc, char * argv[])
                 fiad.sequence_number = 0;
                 fiad.filename_size = strlen(filename);
                 fiad.filename = filename;
-                fseek(f, 0L, SEEK_END);
-                fiad.file_size = ftell(f);
-                fseek(f, 0, SEEK_SET);
-                fiad.block_size = 512;
-                //fread(temp_buf,1,10,f);
-                //TODO ADD READ DATA
-                fiad.data = "DUMMY DATA";
+                fseeko(f, 0L, SEEK_END);
+                fiad.file_size = ftello(f);
+                fseeko(f, 0, SEEK_SET);
+                fiad.block_size = BLOCKSIZE;
+                fread(fiad.data,1,fiad.block_size,f);
                 send_file_info_and_data(fiad, s, client_addr);
                 fclose(f);
             }   
