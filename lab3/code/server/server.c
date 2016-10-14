@@ -152,9 +152,14 @@ int main(int argc, char * argv[])
             ack_seq_no = ntohs(ack_seq_no); // Convert from Net to Host byte order
             printf("ACK %d received\n", ack_seq_no);
             // Update Sliding Window Parameters
+            
         }
         /* Send to client */
-        
+        char block_buf[BLOCKSIZE];
+        //Store data into block buf based on frame number
+
+
+                
     }
 
 
