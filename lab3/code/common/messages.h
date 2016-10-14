@@ -8,8 +8,10 @@ struct file_request
 struct ACK
 {
     uint8_t type; // = 1
-    uint8_t num_sequences;
-    uint16_t *sequence_no;
+    //TODO Change to original if we plan on implementing Selective ACK
+    //uint8_t num_sequences; // For Positive ACK it will always be 1
+    //uint16_t *sequence_no;
+    uint16_t sequence_no;
 };
 
 struct file_info_and_data
@@ -103,6 +105,24 @@ void send_file_info_and_data(struct file_info_and_data fiad, int s, struct socka
     outbuf+=sizeof(fiad.block_size);
     memcpy(outbuf, fiad.data, fiad.block_size);
     printf("Sending message that fiad to client for file: %s\n", fiad.filename);
+
+    /* send message to server */  
+    sendto(s, msgbuf, total_size, 0, (struct sockaddr *)&sin, sizeof(sin));
+
+}
+
+void send_ack(struct ACK ack, int s, struct sockaddr_in sin){
+
+    // msgbuf holds actual message
+    // outbuf is being used as pointer to fill the locations
+    void *msgbuf, *outbuf;
+
+    int total_size = sizeof(ack.type) + sizeof(ack.sequence_no);
+    msgbuf = outbuf = malloc(total_size);
+    memcpy(outbuf, &ack.type, sizeof(ack.type));
+    outbuf+=sizeof(ack.type);
+    memcpy(outbuf, &ack.sequence_no, sizeof(ack.sequence_no));
+    printf("Sending ACK %d.\n", ntohs(ack.sequence_no)); //Actual data being sent in Network Order
 
     /* send message to server */  
     sendto(s, msgbuf, total_size, 0, (struct sockaddr *)&sin, sizeof(sin));

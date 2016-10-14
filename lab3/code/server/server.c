@@ -143,8 +143,11 @@ int main(int argc, char * argv[])
         }
         else if(rec_type == 1){
             // ACK 
+            uint16_t ack_seq_no;
+            memcpy(&ack_seq_no, buf+1, 2);
+            ack_seq_no = ntohs(ack_seq_no); // Convert from Net to Host byte order
+            printf("ACK %d received\n", ack_seq_no);
             // Update Sliding Window Parameters
-
         }
         /* Send to client */
         

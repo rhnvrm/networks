@@ -97,6 +97,12 @@ int main(int argc, char * argv[])
         }
         else if(rec_type == 2){
             printf("File was found\n");
+
+            //Parse the initial FIAD and set SWP parameters
+
+            //Send initial ACK
+            struct ACK ack = {1, htons(10)};
+            send_ack(ack, s, sin);
         }
     }
     
