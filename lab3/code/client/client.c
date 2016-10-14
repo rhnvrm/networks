@@ -34,6 +34,8 @@ int main(int argc, char * argv[])
     char buf[BUF_SIZE];
     int s, len;
     uint8_t rec_type; 
+    int *ack_counter;
+    int lfr, laf, rws;
 
     if ((argc==2)||(argc == 3)) 
     {
@@ -98,6 +100,7 @@ int main(int argc, char * argv[])
             printf("File was not found on the server!\n");
         }
         else if(rec_type == 2){
+            // RECV FIAD
             printf("File was found\n");
 
             //Parse the initial FIAD 
@@ -121,13 +124,26 @@ int main(int argc, char * argv[])
             char rec_data[BLOCKSIZE];
             memcpy(&rec_data, buf+4+rec_fname_size+4+2, block_size);
             printf("DATA: %s\n", rec_data);
+
+
             //set SWP parameters
             unsigned long calc_frame_size = rec_file_size/block_size;
             printf("Calculated frames = %ld\n", calc_frame_size);
 
+            /*ack_counter = malloc(sizeof(int)*(calc_frame_size+1));
+            for(int i = 0; i <= calc_frame_size; i++)
+                ack_counter[i]=0;
+            */
+            lfr = 0;
+            rws = 5; //Anything goes? RWS = SWS
+            laf = 0;
+
             //Send initial ACK
             struct ACK ack = {1, rec_seq_no};
             send_ack(ack, s, sin);
+        }
+        else if(rec_type == 3){
+            // RECV Data
         }
     }
     

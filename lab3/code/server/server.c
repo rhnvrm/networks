@@ -40,6 +40,7 @@ int main(int argc, char * argv[])
     uint8_t rec_type; 
     char* filename;
     FILE* f;
+    int sws, lar, lfs;
 
     // Create Socket 
     if ((s = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -124,7 +125,7 @@ int main(int argc, char * argv[])
                 send_file_not_found(fnf, s, client_addr);
             }
             else{
-                // Set Filename and initialze sliding window parameters
+                // Set Filename and initialze 
                 struct file_info_and_data fiad;
                 fiad.type = 2;
                 fiad.sequence_number = 0;
@@ -137,6 +138,10 @@ int main(int argc, char * argv[])
                 fread(fiad.data,1,fiad.block_size,f);
                 send_file_info_and_data(fiad, s, client_addr);
                 fclose(f);
+                //set sliding window parameters
+                lfs = 0;
+                lar = -1;
+                sws = 5; //Anything goes? RWS = SWS
             }   
             // Optional: Add code to serve multiple clients by forking (Reuse from LAB#2)
         }
