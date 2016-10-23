@@ -23,7 +23,6 @@
 
 #define SERVER_PORT 5432
 #define BUF_SIZE 90960
-#define BLOCKSIZE 1024
 
 int main(int argc, char * argv[])
 {
@@ -82,8 +81,8 @@ int main(int argc, char * argv[])
     }
 
     // TODO: Set using argument argv
-    //char *filename = "sia.m4a";
-    char *filename = "warbitch.txt";
+    char *filename = "sia.m4a";
+    // char *filename = "warbitch.txt";
 
     struct file_request fr;
     fr.type = 0;
@@ -132,8 +131,8 @@ int main(int argc, char * argv[])
             unsigned long calc_frame_size = rec_file_size/block_size;
             printf("Calculated frames = %ld\n", calc_frame_size);
 
-            lfr = 0;
-            rws = 5; //Anything goes? RWS = SWS
+            lfr = -1;
+            rws = 1; //Anything goes? RWS = SWS
             laf = 0;
 
             //Send initial ACK
@@ -147,16 +146,26 @@ int main(int argc, char * argv[])
             memcpy(&rec_seq_no, buf+1, 2);
             rec_seq_no = ntohs(rec_seq_no); // Convert from Net to Host byte order
             printf("Seq No: %"PRIu16"\n", rec_seq_no);
-            uint16_t block_size;
-            memcpy(&block_size, buf+3, 2);
-            block_size = block_size;
-            printf("block_size: %d Bytes\n", block_size);
-            char rec_data[BLOCKSIZE];
-            memcpy(&rec_data, buf+5, block_size);
-            //printf("DATA: %s\n", rec_data);
-            FILE *fp = fopen(filename, "a");
-            fprintf(fp,"%s", rec_data);
-            fclose(fp);
+            
+            if(rec_seq_no == lfr+1) {
+                lfr++;
+                // sending ack 
+                struct ACK ack = {1, rec_seq_no};
+                send_ack(ack, s, sin);
+                laf++;
+                uint16_t block_size;
+                memcpy(&block_size, buf+3, 2);
+                block_size = block_size;
+                printf("block_size: %d Bytes\n", block_size);
+                char rec_data[BLOCKSIZE];
+                memcpy(&rec_data, buf+5, block_size);
+                //printf("DATA: %s\n", rec_data);
+                FILE *fp = fopen(filename, "a");
+                fprintf(fp,"%s", rec_data);
+                fclose(fp);    
+            }
+            
+
 
         }
     }

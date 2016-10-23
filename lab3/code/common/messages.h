@@ -1,4 +1,4 @@
-#define BLOCKSIZE 1024
+#define BLOCKSIZE 64000
 
 struct file_request
 {
