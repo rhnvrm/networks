@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
             if(rec_seq_no == lfr+1) {
                 lfr++;
                 // sending ack 
-                struct ACK ack = {1, rec_seq_no};
+                struct ACK ack = {1, htons(rec_seq_no)};
                 send_ack(ack, s, sin);
                 laf++;
                 uint16_t block_size;
@@ -159,14 +159,13 @@ int main(int argc, char * argv[])
                 printf("block_size: %d Bytes\n", block_size);
                 char rec_data[BLOCKSIZE];
                 memcpy(&rec_data, buf+5, block_size);
-                //printf("DATA: %s\n", rec_data);
-                FILE *fp = fopen(filename, "a");
+                printf("DATA: %s\n", rec_data);
+                FILE *fp = fopen(filename, "a+");
                 fprintf(fp,"%s", rec_data);
+                printf("%s \n", rec_data);
+                // fwrite(rec_data, 1, strlen(rec_data), fp);
                 fclose(fp);    
             }
-            
-
-
         }
     }
     
