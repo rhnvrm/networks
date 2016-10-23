@@ -20,12 +20,63 @@
 #include <unistd.h>
 #include <sys/stat.h> 
 #include <fcntl.h>
+#include <pthread.h>     
+#include <inttypes.h>   
 
 #include "../common/messages.h"
 
 #define SERVER_PORT 5432
 #define BUF_SIZE 90960
 #define BLOCKSIZE 1024
+#define SWS 5    
+
+struct SlidingWindow
+{
+    int sws, lar, lfs;    
+
+} swp;
+
+
+struct thread_args{
+    int *s;
+    struct sockaddr_storage  *client_addr;
+    char **filename;
+} t_args;
+
+void* SlidingWindowSender(void* argp){
+    struct thread_args *args = argp;
+    FILE* f = fopen(*args->filename, "r");
+    while(1){
+        printf("IN SWS %d %d %d\n", swp.sws, swp.lar, swp.lfs);
+        
+        
+        //Send Packets based on swp
+        for(int i = 0; i < swp.sws; i++){ 
+            struct data sdata;
+            sdata.type = 3;
+            sdata.sequence_number = htons(swp.lfs + i);
+            sdata.block_size = BLOCKSIZE;
+            
+            // ADD FSEEK HERE
+            //fsee
+            fread(sdata.data,1,sdata.block_size,f);
+            printf("%s\n", sdata.data);
+            
+            //Write condition to end thread
+            if(fgetc(f) == EOF){
+                fclose(f);
+                printf("FILE TRANSFER COMPLETE\n");
+                return NULL;
+            }
+            
+
+            send_data(sdata, *args->s, *args->client_addr);
+        }
+
+
+        usleep(2000000); // 2 second sleep
+    }
+}    
 
 int main(int argc, char * argv[])
 {
@@ -40,7 +91,8 @@ int main(int argc, char * argv[])
     uint8_t rec_type; 
     char* filename;
     FILE* f;
-    int sws, lar, lfs;
+    
+    pthread_t pth; //Thread Identifier
 
     // Create Socket 
     if ((s = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -88,7 +140,7 @@ int main(int argc, char * argv[])
 
     client_addr_len = sizeof(client_addr);
 
-
+    int sending_data = 0; //Inititally False
 
     /* Receive messages from clients*/
     while(len = recvfrom(s, buf, sizeof(buf), 0, (struct sockaddr *)&client_addr, &client_addr_len))
@@ -139,9 +191,15 @@ int main(int argc, char * argv[])
                 send_file_info_and_data(fiad, s, client_addr);
                 fclose(f);
                 //set sliding window parameters
-                lfs = 0;
-                lar = -1;
-                sws = 5; //Anything goes? RWS = SWS
+                swp.lfs = 0; //last frame sent
+                swp.lar = -1; //last ack recvd
+                swp.sws = SWS; //Anything goes? RWS = SWS
+
+                t_args.s = &s;
+                t_args.client_addr = &client_addr;
+                t_args.filename = &filename;
+                //Start new thread for sending data using Sliding Window
+                pthread_create(&pth,NULL,SlidingWindowSender,&t_args);
             }   
             // Optional: Add code to serve multiple clients by forking (Reuse from LAB#2)
         }
@@ -152,15 +210,11 @@ int main(int argc, char * argv[])
             ack_seq_no = ntohs(ack_seq_no); // Convert from Net to Host byte order
             printf("ACK %d received\n", ack_seq_no);
             // Update Sliding Window Parameters
+            // Update swp lar 
             
-        }
-        /* Send to client */
-        char block_buf[BLOCKSIZE];
-        //Store data into block buf based on frame number
-
-
-                
+        }     
     }
+
 
 
     return 0;
