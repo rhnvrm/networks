@@ -135,7 +135,7 @@ void send_data(struct data d, int s, struct sockaddr_storage sin){
     outbuf+=sizeof(d.block_size);
     memcpy(outbuf, d.data, d.block_size);
 
-    printf("Sending message with data to client\n");
+    printf("Sending: Seq#%"PRIu16"\n", ntohs(d.sequence_number));
 
     /* send message to client */  
     sendto(s, msgbuf, total_size, 0, (struct sockaddr *)&sin, sizeof(sin));

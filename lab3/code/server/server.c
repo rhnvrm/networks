@@ -27,7 +27,7 @@
 
 #define SERVER_PORT 5432
 #define BUF_SIZE 90960
-#define SWS 5    
+#define SWS 10
 
 struct SlidingWindowParameter
 {
@@ -48,32 +48,38 @@ void* SlidingWindowSender(void* argp){
     while(1){
         printf("IN SWS %d %d %d\n", swp.sws, swp.lar, swp.lfs);
         
+        int diff = swp.lfs - swp.lar;
+        fseek(f, -(BLOCKSIZE*(diff-1)),SEEK_CUR);
+
+        swp.lfs = swp.lar + 1;
         if(swp.lar < swp.lfs) {
 
         //Send Packets based on swp
             for(int i = 0; i < swp.sws; i++){ 
                 struct data sdata;
                 sdata.type = 3;
-                sdata.sequence_number = htons(swp.lfs + i);
+                sdata.sequence_number = htons(swp.lfs);
                 sdata.block_size = BLOCKSIZE;
 
-            // ADD FSEEK HERE
-            //fsee
-                fread(sdata.data,1,sdata.block_size,f);
-                printf("%s\n", sdata.data);
+                // ADD FSEEK HERE
+                //fsee
 
-            //Write condition to end thread
+                fread(sdata.data,1,sdata.block_size,f);
+                swp.lfs++;
+                //printf("%s\n", sdata.data);
+
+                send_data(sdata, *args->s, *args->client_addr);
+                //Write condition to end thread
                 if(fgetc(f) == EOF){
                     fclose(f);
                     printf("FILE TRANSFER COMPLETE\n");
                     return NULL;
                 }
 
-
-                send_data(sdata, *args->s, *args->client_addr);
+                usleep(50000);
             }
         }
-        swp.lfs += swp.sws;
+        
         usleep(2000000); // 2 second sleep
     }
 }    
@@ -150,7 +156,7 @@ client_addr_len = sizeof(client_addr);
          &(((struct sockaddr_in *)&client_addr)->sin_addr),
          clientIP, INET_ADDRSTRLEN);
 
-      printf("Server got message from %s: %s [%d bytes]\n", clientIP, buf, len);
+      //printf("Server got message from %s: %s [%d bytes]\n", clientIP, buf, len);
       memcpy(&rec_type, buf, 1);
       printf("Type: %d\n", rec_type);
       if(rec_type == 0)
