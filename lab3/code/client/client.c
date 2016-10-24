@@ -81,8 +81,11 @@ int main(int argc, char * argv[])
     }
 
     // TODO: Set using argument argv
-    char *filename = "sia.m4a";
+    char *filename = "tilt.webm";
+    // char *filename = "crying.mp4";
+    // char *filename = "blink-182.mp3";
     // char *filename = "warbitch.txt";
+    // char *filename = "side.mp3";
 
     struct file_request fr;
     fr.type = 0;
@@ -159,11 +162,13 @@ int main(int argc, char * argv[])
                 printf("block_size: %d Bytes\n", block_size);
                 char rec_data[BLOCKSIZE];
                 memcpy(&rec_data, buf+5, block_size);
-                printf("DATA: %s\n", rec_data);
+                // printf("%d\n", );
+                // printf("DATA: %s\n", rec_data);
+                // printf("block_size: %d\n", block_size);
+                //file handling
                 FILE *fp = fopen(filename, "a+");
-                fprintf(fp,"%s", rec_data);
-                printf("%s \n", rec_data);
-                // fwrite(rec_data, 1, strlen(rec_data), fp);
+                fwrite(rec_data, 1, sizeof(rec_data), fp);
+                fflush(fp);
                 fclose(fp);    
             }
         }
