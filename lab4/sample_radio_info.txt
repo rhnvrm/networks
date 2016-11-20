@@ -1,0 +1,13 @@
+10 
+size
+SNU Beautiful Radio
+size
+This is snu's most beautiful radio ever
+1
+1
+size
+Rocking FM
+multicast address
+data_port: 
+info_port: 
+bit_rate:
