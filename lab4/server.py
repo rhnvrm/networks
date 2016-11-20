@@ -1,10 +1,17 @@
 from jsonsocket import Server
+
 import socket
+import os
+
+from iradio_structs import station_info_request
 
 # host = socket.gethostbyname('hp')
 host = 'localhost'
-port = 4339
+port = 5432
 
+def _process(data):
+
+    print (data['type'])
 
 def iradio_req_process():
 
@@ -16,16 +23,16 @@ def iradio_req_process():
         server.accept()
         data = server.recv()
 
-        print data
-        # _process(data)
+        _process(data)
         server.send({'success': '1'})
 
 
 def main():
     """ 
     create_multicast_radio_in_child_process()
-    """
+    """ 
     iradio_req_process()
+
 
 
 if __name__ == '__main__':

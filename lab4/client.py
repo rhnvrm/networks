@@ -1,4 +1,5 @@
 from jsonsocket import Client
+
 import json
 
 
@@ -9,7 +10,7 @@ class radio_info:
         self.senders_name = senders_name
 
 host = '0.0.0.0'  # server IP address
-port = 4339 	 # hard coded port
+port = 5432 	 # hard coded port
 
 
 def get_radio_info(iradio_req):
@@ -25,9 +26,16 @@ def get_radio_info(iradio_req):
 
 
 def main():
+    print "Connecting to server.."
+    print "Requesting station list from server..."
     iradio_req = radio_info(10, "mohak")
     radio_details = get_radio_info(iradio_req)
-
+"""
+    print_radio_details and get_user_input
+    setup_multicast_server on same program
+    run_multicast_server
+"""
+    
 
 if __name__ == '__main__':
     main()
