@@ -36,7 +36,7 @@ def iradio(file_name):
 	size = 10*1024*1024
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, size)
 
-	sleep = (buf*8.0/get_bit_rate_radio(file_name))*0.95
+	sleep = (buf*8.0/get_bit_rate_radio(file_name))*0.90
 	print (sleep)
 
 	while True:
@@ -49,7 +49,7 @@ def iradio(file_name):
 			if s.sendto(data, (MCAST_GRP, MCAST_PORT)):
 				# print (".")
 				data = f.read(buf)
-				time.sleep(sleep) # 5 milli
+				time.sleep(sleep)
 
 		
 		f.close()
@@ -57,11 +57,6 @@ def iradio(file_name):
 
 	s.close()
 
-	# while True:
-	# 	for i in range(100):
-	# 		s.sendto(str(i), (MCAST_GRP, MCAST_PORT))
-	# 		print "sending ", i
-	# 		time.sleep(0.05/10) 
 
 
 def main():
