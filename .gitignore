@@ -1,6 +1,7 @@
 *.mp4
 *.m4a
 *.zip
+*.ts
 lab3/client/c
 lab3/server/c
 

@@ -20,10 +20,10 @@ def get_bit_rate_radio(path):
 
 	ffprobeOutput = json.loads(subprocess.check_output(args).decode('utf-8'))
 	
-	return int(ffprobeOutput['streams'][1]['bit_rate'])
+	return int(ffprobeOutput['streams'][0]['bit_rate'])
 
 
-def iradio():
+def iradio(file_name):
 	# create socket 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 	
@@ -36,13 +36,13 @@ def iradio():
 	size = 10*1024*1024
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, size)
 
-	sleep = (buf*8.0/get_bit_rate_radio('output_mp2.ts'))*0.95
+	sleep = (buf*8.0/get_bit_rate_radio(file_name))*0.95
 	print (sleep)
 
 	while True:
 
 		# sending one song at a time for now 
-		f = open('output_mp3.ts', 'rb')
+		f = open(file_name, 'rb')
 
 		data = f.read(buf)
 		while data:
@@ -65,7 +65,7 @@ def iradio():
 
 
 def main():
-	iradio()
+	iradio('output_mp3.ts')
 
 if __name__ == '__main__':
 	main() 

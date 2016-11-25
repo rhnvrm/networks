@@ -28,11 +28,13 @@ def iradio():
 	size = 10*1024*1024
 	s.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF, size)
 		
+	commands = ['ffplay', '-']
+	player_process = subprocess.Popen(commands, stdin=subprocess.PIPE)
 
 	while True:
 		try:
 			data, addr = s.recvfrom(buf)
-			print (data)
+			player_process.stdin.write(data)
 			s.settimeout(5)		
 		
 		except socket.timeout:

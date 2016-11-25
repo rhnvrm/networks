@@ -46,11 +46,10 @@ def menu_invoke(response='NaN', init=0):
 
 def play_multicast_radio():
 
-    iradio_client.iradio()
 
     # # create thread and pass the play multicast radio
-    # thread = thereading.Thread(target = multicast.client.play_multicast_radio())
-    # thread.start()
+    thread = threading.Thread(target = iradio_client.iradio())
+    thread.start()
 
     # rev_input = menu_invoke()
     # if rev_input == 'P':
