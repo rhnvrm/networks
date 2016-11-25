@@ -8,10 +8,10 @@ class station_info_request:
 
 class station_info():
 
-	def __init__(self, station_number,
-				station_name_size, station_name,
-				multicast_address, data_port, 
-				info_port, bit_rate):
+	def __init__(self, station_number='',
+				station_name_size='', station_name='',
+				multicast_address='', data_port='', 
+				info_port='', bit_rate=''):
 	
 		self.station_number = station_number
 		self.station_name_size = station_name_size
