@@ -39,7 +39,8 @@ def iradio():
 		
 		except socket.timeout:
 			print ("connection dropped")
-			s.close()
+			# no need to close socket
+			# s.close()
 
 
 	# f = open('client.ts','wb', buf) 

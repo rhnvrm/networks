@@ -48,7 +48,7 @@ def play_multicast_radio():
 
 
     # # create thread and pass the play multicast radio
-    thread = threading.Thread(target = iradio_client.iradio())
+    thread = threading.Thread(target=iradio_client.iradio())
     thread.start()
 
     # rev_input = menu_invoke()
@@ -68,10 +68,10 @@ def play_multicast_radio():
 #   # and stops the thread accordingly 
 
 def main():
-    print "Requesting station list from server..."
-    radio_list = get_radio_info()
-    print "Recieved station list.."
-    print radio_list
+    # print "Requesting station list from server..."
+    # radio_list = get_radio_info()
+    # print "Recieved station list.."
+    # print radio_list
     play_multicast_radio()
     # print_radio_info(radio_list)
     
