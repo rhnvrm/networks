@@ -6,7 +6,7 @@ import threading
 import json
 import sys # for exit
 
-host = '0.0.0.0'  # server IP address
+host = sys.argv[1] or '0.0.0.0'  # server IP address
 port = 5432       # hard coded port
 
 
@@ -68,10 +68,10 @@ def play_multicast_radio():
 #   # and stops the thread accordingly 
 
 def main():
-    # print "Requesting station list from server..."
-    # radio_list = get_radio_info()
-    # print "Recieved station list.."
-    # print radio_list
+    print "Requesting station list from server..."
+    radio_list = get_radio_info()
+    print "Recieved station list.."
+    print radio_list
     play_multicast_radio()
     # print_radio_info(radio_list)
     

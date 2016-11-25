@@ -1,12 +1,12 @@
 from jsonsocket import Server
 from multicast import iradio_server
-import socket
+import socket, threading
 import os
 
 from iradio_structs import station_info_request
 
 # host = socket.gethostbyname('hp')
-host = 'localhost'
+host = '0.0.0.0'
 port = 5432
 
 def _process(data):
@@ -41,7 +41,9 @@ def iradio_req_process():
 
 
 def create_multicast_radio():
-    
+    thread = threading.Thread(target=iradio_server.iradio('one.ts'))
+    thread.start()
+
 
 def ascii_art():
 
@@ -49,21 +51,24 @@ def ascii_art():
 
                                        ._ o o
                                        \_`-)|_
-                                    ,""       \ 
-                                  ,"  ## |      . 
+                                    ,""       \
+                                  ,"  ## |      .
                                 ," ##   ,-\__    `.
                               ,"       /     `--._;)
                             ,"     ## /
                           ,"   ##    /
     """
 
+
 def main():
     ascii_art()
+
+    thread_req = threading.Thread(target=iradio_req_process())
+    thread_req.start()
     
-    # spwan multicast radio's 
     create_multicast_radio()
-    
-    iradio_req_process()
+
+
 
 if __name__ == '__main__':
     main()
