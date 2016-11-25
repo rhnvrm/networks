@@ -33,7 +33,7 @@ class site_info:
 		self.site_name_size = site_name_size
 		self.site_name = site_name # list
 		self.site_desc_size = site_desc_size 
-		self.site_desc
+		self.site_desc = site_desc
 		self.station_count = station_count
 		self.station_list = station_list # list of station info type
 
