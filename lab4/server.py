@@ -41,7 +41,7 @@ def iradio_req_process():
 
 
 def create_multicast_radio():
-    pass
+    
 
 def ascii_art():
 
@@ -61,7 +61,7 @@ def main():
     ascii_art()
     
     # spwan multicast radio's 
-    # create_multicast_radio_in_child_process()
+    create_multicast_radio()
     
     iradio_req_process()
 
