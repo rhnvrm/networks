@@ -27,15 +27,16 @@ def iradio():
 
 	size = 10*1024*1024
 	s.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF, size)
-	
+		
 
 	while True:
 		try:
 			data, addr = s.recvfrom(buf)
-			print data
+			print (data)
 			s.settimeout(5)		
+		
 		except socket.timeout:
-			print "connection dropped"
+			print ("connection dropped")
 			s.close()
 
 
@@ -95,10 +96,10 @@ def stream():
 	# 	print "trying"
 	# 	time.sleep(2)
 
-	print "new thread spawned"
-	print "sleeping.. for 5 sec"
+	print ("new thread spawned")
+	print ("sleeping.. for 5 sec")
 	time.sleep(5)
-	print "trying to play song"
+	print ("trying to play song")
 	subprocess.call(['ffplay', 'client.ts'])
 
 def main():

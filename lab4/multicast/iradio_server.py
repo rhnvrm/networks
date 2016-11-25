@@ -2,12 +2,26 @@
 
 import socket
 import time
+import os
+import json
+import shlex
+import subprocess
 
 # MCAST_GRP = '224.1.1.1'
 MCAST_GRP = '230.192.3.255'
 MCAST_PORT = 5432
 
 buf = 2048
+
+def get_bit_rate_radio(path):
+	cmd = 'ffprobe -print_format json -show_streams'
+	args = shlex.split(cmd)
+	args.append(path)
+
+	ffprobeOutput = json.loads(subprocess.check_output(args).decode('utf-8'))
+	
+	return int(ffprobeOutput['streams'][1]['bit_rate'])
+
 
 def iradio():
 	# create socket 
@@ -22,6 +36,9 @@ def iradio():
 	size = 10*1024*1024
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, size)
 
+	sleep = (buf*8.0/get_bit_rate_radio('output_mp2.ts'))*0.95
+	print (sleep)
+
 	while True:
 
 		# sending one song at a time for now 
@@ -30,13 +47,13 @@ def iradio():
 		data = f.read(buf)
 		while data:
 			if s.sendto(data, (MCAST_GRP, MCAST_PORT)):
-				print "sending"
+				# print (".")
 				data = f.read(buf)
-				time.sleep(0.04) # 5 milli
+				time.sleep(sleep) # 5 milli
 
 		
 		f.close()
-		print "Send Successful!"
+		print ("Send Successful!")
 
 	s.close()
 
