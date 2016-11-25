@@ -1,6 +1,5 @@
 # !/usr/bin/env python
 
-from binarysocket import mysocket
 import socket
 import struct
 
@@ -9,8 +8,9 @@ import time
 import threading
 import os
 
-MCAST_GRP = '224.1.1.1' # multicast group to subscribe to
-MCAST_PORT = 5007 		# data port of multicast stream 
+# MCAST_GRP = '224.1.1.1' # multicast group to subscribe to
+MCAST_GRP = '230.192.3.255'
+MCAST_PORT = 5432 		# data port of multicast stream 
 buf = 2048
 
 def iradio():
@@ -25,40 +25,65 @@ def iradio():
 	mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
 	s.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
+	size = 10*1024*1024
+	s.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF, size)
+	
 
-	f = open('client.ts','wb', buf) 
-	# start reciving data 
-	data, addr = s.recvfrom(buf)
-
-	# spawn a thread to start playing the stream at suitable time
-	# streaming_thread = threading.Thread(target=stream())	
-	# streaming_thread.start()
-
-
-	# piping data recived directly to ffplay stdin
-	commands = ['ffplay', '-']
-	player_process = subprocess.Popen(commands, stdin=subprocess.PIPE)
-	try: 		
-		
-		while(data):	
-			player_process.stdin.write(data)
-
-			# f.write(data)
-			# force write data to disk everytime there is a write
-			# f.flush()
-			# os.fsync(f.fileno())
-
-			s.settimeout(5)
+	while True:
+		try:
 			data, addr = s.recvfrom(buf)
+			print data
+			s.settimeout(5)		
+		except socket.timeout:
+			print "connection dropped"
+			s.close()
 
-	except socket.timeout:
-		f.close()
-		s.close()
-		print "Song completely buffered"
 
-	# replace with stdin return codes to terminate
-	time.sleep(50)
+	# f = open('client.ts','wb', buf) 
+	# # start reciving data 
+	# data, addr = s.recvfrom(buf)
 
+	# # spawn a thread to start playing the stream at suitable time
+	# # streaming_thread = threading.Thread(target=stream())	
+	# # streaming_thread.start()
+
+
+	# # piping data recived directly to ffplay stdin
+	# commands = ['ffplay', '-']
+	# # pipe sub process output to null
+	# FNULL = open(os.devnull, 'w')
+	# player_process = subprocess.Popen(commands, stdin=subprocess.PIPE, stdout=subprocess.PIPE) #stdout=FNULL)
+	# try: 		
+		# s.settimeout(5)
+	# 	while(data):	
+	# 		player_process.stdin.write(data)
+
+	# 		# f.write(data)
+	# 		# force write data to disk everytime there is a write
+	# 		# f.flush()
+	# 		# os.fsync(f.fileno())
+
+
+	# 		data, addr = s.recvfrom(buf)
+
+	# except socket.timeout:
+	# 	f.close()
+	# 	s.close()
+	# 	print "Song completely buffered"
+
+	# while True:
+	# # replace with stdin return codes to terminate
+	# 	try:
+ #  			proc = subprocess.check_output(commands, stderr=subprocess.STDOUT)
+ #  			# do something with output
+ #  			print proc
+	# 	except subprocess.CalledProcessError:
+ #  			print 'There was an error - command exited with non-zero code'
+ #  			break
+
+ #  	print 'exiting program'
+
+ # 	player_process.wait()
 	
 	
 
