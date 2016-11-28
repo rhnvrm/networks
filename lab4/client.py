@@ -6,7 +6,7 @@ import threading
 import json
 import sys # for exit
 
-host = sys.argv[1] or '0.0.0.0'  # server IP address
+host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'  # server IP address
 port = 5432       # hard coded port
 
 
