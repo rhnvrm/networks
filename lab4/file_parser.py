@@ -29,12 +29,6 @@ def file_parser():
 		print radio1			
 
 
-					
-
-
-
-
-
 def hard_coded():
 	r1 = station_info(1, 99,
 					'RockFM', '224.1.1.1',

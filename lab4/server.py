@@ -8,6 +8,7 @@ import os
 
 host = '0.0.0.0'
 port = 6969
+path = '/home/manu/Music/test_folder' # path to music library folders
 
 def _process(data):
     pass
@@ -39,16 +40,20 @@ def iradio_req_process():
         print (count_clients)
         # server.send({'success': '1'})
 
-def create_multicast_radio():
-    thread = threading.Thread(target=iradio_server.iradio, args=['one.ts'])
-    thread.start()
-
+def music_folder_names():
+	folders_in_path = os.listdir(path)
+	
+	return folders_in_path
 
 def main():
     ascii_art()
 
     port = 5432
-    for i in range(1,4):
+
+    # yet to implement
+    folder_list = get_music_folder_names()
+    
+    for i in range(1,4): # assuming directory contains 1.ts, 2.ts, etc. from where program is run
         multicast_process = Process(target=iradio_server.iradio, args=('{}.ts'.format(i), port,))
         multicast_process.start()
         port += 1
