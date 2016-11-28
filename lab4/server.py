@@ -34,9 +34,9 @@ def iradio_req_process():
         from file_parser import hard_coded 
         server.send(hard_coded().__dict__)
 
-        print "Radio list sent to client #{}".format(count_clients)
+        print ("Radio list sent to client #{}".format(count_clients))
         count_clients += 1
-        print count_clients
+        print (count_clients)
         # server.send({'success': '1'})
 
 
@@ -47,7 +47,7 @@ def create_multicast_radio():
 
 def ascii_art():
 
-    print """
+    print ("""
 
                                        ._ o o
                                        \_`-)|_
@@ -57,7 +57,7 @@ def ascii_art():
                               ,"       /     `--._;)
                             ,"     ## /
                           ,"   ##    /
-    """
+    """)
 
 
 def main():
