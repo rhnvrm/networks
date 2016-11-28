@@ -48,8 +48,11 @@ def create_multicast_radio():
 def main():
     ascii_art()
 
-    multicast_process = Process(target=iradio_server.iradio, args=('one.ts',))
-    multicast_process.start()
+    port = 5432
+    for i in range(4):
+        multicast_process = Process(target=iradio_server.iradio, args=('{}.ts'.format(i), port,))
+        multicast_process.start()
+        port += 1
 
     print ('finally..')
     iradio_req_process()

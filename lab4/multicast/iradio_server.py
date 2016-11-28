@@ -23,7 +23,7 @@ def get_bit_rate_radio(path):
 	return int(ffprobeOutput['streams'][1]['bit_rate'])
 
 
-def iradio(file_name):
+def iradio(file_name, port):
 	# create socket 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 	
@@ -39,6 +39,8 @@ def iradio(file_name):
 	sleep = (buf*8.0/get_bit_rate_radio(file_name))*0.90
 	print (sleep)
 
+	MCAST_LOCAL_PORT = port 
+
 	while True:
 
 		# sending one song at a time for now 
@@ -46,7 +48,7 @@ def iradio(file_name):
 
 		data = f.read(buf)
 		while data:
-			if s.sendto(data, (MCAST_GRP, MCAST_PORT)):
+			if s.sendto(data, (MCAST_GRP, MCAST_LOCAL_PORT)):
 				# print (".")
 				data = f.read(buf)
 				time.sleep(sleep)

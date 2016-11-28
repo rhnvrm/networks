@@ -13,13 +13,15 @@ MCAST_GRP = '230.192.3.255'
 MCAST_PORT = 5432 		# data port of multicast stream 
 buf = 2048
 
-def iradio():
+def iradio(port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	
 	# use MCAST_GRP instead of '' to listen only
 	# to MCAST_GRP, not all groups on MCAST_PORT
-	s.bind(('', MCAST_PORT)) 
+
+	MCAST_LOCAL_PORT = port
+	s.bind(('', MCAST_LOCAL_PORT)) 
 	
 	# some multicast options
 	mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
@@ -91,19 +93,19 @@ def iradio():
 	
 	
 
-def stream():
-	# import os 
-	# cons = 2.5*1024*1024
-	# size = os.path.getsize('client.ts')
-	# while size < cons:
-	# 	print "trying"
-	# 	time.sleep(2)
+# def stream():
+# 	# import os 
+# 	# cons = 2.5*1024*1024
+# 	# size = os.path.getsize('client.ts')
+# 	# while size < cons:
+# 	# 	print "trying"
+# 	# 	time.sleep(2)
 
-	print ("new thread spawned")
-	print ("sleeping.. for 5 sec")
-	time.sleep(5)
-	print ("trying to play song")
-	subprocess.call(['ffplay', 'client.ts'])
+# 	print ("new thread spawned")
+# 	print ("sleeping.. for 5 sec")
+# 	time.sleep(5)
+# 	print ("trying to play song")
+# 	subprocess.call(['ffplay', 'client.ts'])
 
 def main():
 	iradio()

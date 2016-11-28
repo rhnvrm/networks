@@ -9,6 +9,7 @@ import sys # for exit
 host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'  # server IP address
 port = 5432       # hard coded port
 
+udp_port = sys.argv[2] if len(sys.argv) > 2 else 5432
 
 def get_radio_info():
     client = Client()
@@ -48,7 +49,7 @@ def play_multicast_radio():
 
 
     # # create thread and pass the play multicast radio
-    thread = threading.Thread(target=iradio_client.iradio())
+    thread = threading.Thread(target=iradio_client.iradio, args=[udp_port])
     thread.start()
 
     # rev_input = menu_invoke()
