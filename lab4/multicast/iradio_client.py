@@ -7,6 +7,7 @@ import subprocess
 import time
 import threading
 import os
+import sys
 
 # MCAST_GRP = '224.1.1.1' # multicast group to subscribe to
 MCAST_GRP = '230.192.3.255'
@@ -14,6 +15,10 @@ MCAST_PORT = 5432 		# data port of multicast stream
 buf = 2048
 
 def iradio(port):
+
+	# redirect ouput to a file
+	# sys.stdout = open('client.log', 'w')
+
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	
@@ -31,7 +36,10 @@ def iradio(port):
 	s.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF, size)
 		
 	commands = ['ffplay', '-']
-	player_process = subprocess.Popen(commands, stdin=subprocess.PIPE)
+
+	FNULL = open(os.devnull, 'w')
+	player_process = subprocess.Popen(commands, stdin=subprocess.PIPE, stdout=FNULL, stderr=FNULL)
+	# player_process.communicate()
 
 	while True:
 		try:

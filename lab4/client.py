@@ -9,7 +9,7 @@ import sys # for exit
 from multiprocessing import Process
 
 host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'  # server IP address
-port = 5432       # hard coded port
+port = 6969       # hard coded port
 
 udp_port = sys.argv[2] if len(sys.argv) > 2 else 5432
 
@@ -67,38 +67,32 @@ def play_multicast_radio():
     #   # exit program
     #   sys.exit() 
 
-#   # parent handles te input from the user 
-#   # and stops the thread accordingly 
-
 def main():
     print ("Requesting station list from server...")
     radio_list = get_radio_info()
     print ("Recieved station list..")
     print (radio_list)
- 
-    # thread = threading.Thread(target=iradio_client.iradio, args=[udp_port])
-    # thread.start()
-
 
     process = Process(target=iradio_client.iradio, args=(udp_port,))
     process.start()
 
-    # play_multicast_radio()
-    # print_radio_info(radio_list)
-    
-    # menu_invoke(radio_list, 1)
 
+    # user play and pause
     while True:
-        user_in = raw_input('PL: play or PA: pause')
-        if user_in == 'PA':
-            process.join()
-        elif user_in == 'PL':
+        user_in = raw_input('1: play or 0: pause or -1: exit \n')
+        
+        if user_in == '0' and process.is_alive() is True:
+            process.terminate()
+        elif user_in == '1' and process.is_alive() is False:
             process = Process(target=iradio_client.iradio, args=(udp_port,))
             process.start()
+        elif user_in == '-1':
+            print ('terminating program')
+            process.terminate()
+            sys.exit()
         else:
-            print ('enter better input')
+            print ('enter correct input \n')
 
-    
 
 if __name__ == '__main__':
     main()

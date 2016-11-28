@@ -8,7 +8,7 @@ import os
 
 
 host = '0.0.0.0'
-port = 5432
+port = 6969
 
 def _process(data):
     pass
