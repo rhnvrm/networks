@@ -69,9 +69,9 @@ def play_multicast_radio():
 
 def main():
     print ("Requesting station list from server...")
-    # radio_list = get_radio_info()
+    radio_list = get_radio_info()
     print ("Recieved station list..")
-    # print radio_list
+    print (radio_list)
     play_multicast_radio()
     # print_radio_info(radio_list)
     

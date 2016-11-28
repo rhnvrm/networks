@@ -1,11 +1,12 @@
-from jsonsocket import Server
-from multicast import iradio_server
-import socket, threading
+from jsonsocket import Server # udp
+from multicast import iradio_server #multicast module
+from iradio_structs import station_info_request # iradio 
+
+from multiprocessing import Process 
+import socket
 import os
 
-from iradio_structs import station_info_request
 
-# host = socket.gethostbyname('hp')
 host = '0.0.0.0'
 port = 5432
 
@@ -39,10 +40,19 @@ def iradio_req_process():
         print (count_clients)
         # server.send({'success': '1'})
 
-
 def create_multicast_radio():
-    thread = threading.Thread(target=iradio_server.iradio('one.ts'))
+    thread = threading.Thread(target=iradio_server.iradio, args=['one.ts'])
     thread.start()
+
+
+def main():
+    ascii_art()
+
+    multicast_process = Process(target=iradio_server.iradio, args=('one.ts',))
+    multicast_process.start()
+
+    print ('finally..')
+    iradio_req_process()
 
 
 def ascii_art():
@@ -58,17 +68,6 @@ def ascii_art():
                             ,"     ## /
                           ,"   ##    /
     """)
-
-
-def main():
-    ascii_art()
-
-    thread_req = threading.Thread(target=iradio_req_process())
-    thread_req.start()
-    
-    create_multicast_radio()
-
-
 
 if __name__ == '__main__':
     main()
