@@ -39,17 +39,17 @@ def iradio(file_name, port):
 	sleep = (buf*8.0/get_bit_rate_radio(file_name))*0.90
 	print (sleep)
 
-	MCAST_LOCAL_PORT = port 
+	MCAST_LOCAL_PORT = int(port) 
 
 	while True:
 
-		# sending one song at a time for now 
+		# sending one song at a time 
 		f = open(file_name, 'rb')
 
 		data = f.read(buf)
 		while data:
 			if s.sendto(data, (MCAST_GRP, MCAST_LOCAL_PORT)):
-				# print (".")
+				print (".")
 				data = f.read(buf)
 				time.sleep(sleep)
 
@@ -60,9 +60,8 @@ def iradio(file_name, port):
 	s.close()
 
 
-
 def main():
-	iradio('output_mp3.ts')
+	iradio('2.ts', MCAST_PORT)
 
 if __name__ == '__main__':
 	main() 

@@ -49,7 +49,7 @@ def main():
     ascii_art()
 
     port = 5432
-    for i in range(4):
+    for i in range(1,4):
         multicast_process = Process(target=iradio_server.iradio, args=('{}.ts'.format(i), port,))
         multicast_process.start()
         port += 1

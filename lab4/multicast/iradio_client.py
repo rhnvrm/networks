@@ -20,7 +20,7 @@ def iradio(port):
 	# use MCAST_GRP instead of '' to listen only
 	# to MCAST_GRP, not all groups on MCAST_PORT
 
-	MCAST_LOCAL_PORT = port
+	MCAST_LOCAL_PORT = int(port)
 	s.bind(('', MCAST_LOCAL_PORT)) 
 	
 	# some multicast options
@@ -108,7 +108,7 @@ def iradio(port):
 # 	subprocess.call(['ffplay', 'client.ts'])
 
 def main():
-	iradio()
+	iradio(MCAST_PORT)
 
 if __name__ == '__main__':
  	main() 

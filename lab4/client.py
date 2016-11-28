@@ -6,6 +6,8 @@ import threading
 import json
 import sys # for exit
 
+from multiprocessing import Process
+
 host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'  # server IP address
 port = 5432       # hard coded port
 
@@ -19,7 +21,7 @@ def get_radio_info():
     # object variables as dict
     client.send(iradio_structs.station_info_request().__dict__)
     radio_list = client.recv()
-    print ("radio_list recived")
+    print ("radio_list recieved")
 
     return radio_list
 
@@ -73,7 +75,15 @@ def main():
     radio_list = get_radio_info()
     print ("Recieved station list..")
     print (radio_list)
-    play_multicast_radio()
+ 
+    # thread = threading.Thread(target=iradio_client.iradio, args=[udp_port])
+    # thread.start()
+
+
+    process = Process(target=iradio_client.iradio, args=(udp_port,))
+    process.start()
+
+    # play_multicast_radio()
     # print_radio_info(radio_list)
     
     # menu_invoke(radio_list, 1)
