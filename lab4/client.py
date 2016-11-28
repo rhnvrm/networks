@@ -89,10 +89,10 @@ def main():
     # menu_invoke(radio_list, 1)
 
     while True:
-        in = input('PL: play or PA: pause')
-        if in == 'PA':
+        user_in = raw_input('PL: play or PA: pause')
+        if user_in == 'PA':
             process.join()
-        elif in == 'PL':
+        elif user_in == 'PL':
             process = Process(target=iradio_client.iradio, args=(udp_port,))
             process.start()
         else:
