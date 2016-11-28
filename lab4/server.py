@@ -6,7 +6,6 @@ from multiprocessing import Process
 import socket
 import os
 
-
 host = '0.0.0.0'
 port = 6969
 

@@ -36,36 +36,12 @@ def menu_invoke(response='NaN', init=0):
         Please input options accordingly
         """)
 
-        print ("""
-        Radio playing at the moment, 
-        Please choose relevant options...
-        P: stop playback and close muticast reception
-        R: resume playback
-        C: change station, view updated radio list 
-        X: terminate the client program
-        """)
-
     return str(raw_input())
 
 def play_multicast_radio():
-
-
-    # # create thread and pass the play multicast radio
+    # create thread and pass the play multicast radio
     thread = threading.Thread(target=iradio_client.iradio, args=[udp_port])
     thread.start()
-
-    # rev_input = menu_invoke()
-    # if rev_input == 'P':
-    #   # close the thread
-    #   # todo: gracefully close the socket and then thread.join()
-    # elif rev_input == 'R':
-    #   pass
-    #   # recall same funtion recursively ? search better option
-    # elif rev_input == 'C'
-    #   pass
-    # elif rev_input == 'X':
-    #   # exit program
-    #   sys.exit() 
 
 def main():
     print ("Requesting station list from server...")
@@ -75,7 +51,6 @@ def main():
 
     process = Process(target=iradio_client.iradio, args=(udp_port,))
     process.start()
-
 
     # user play and pause
     while True:

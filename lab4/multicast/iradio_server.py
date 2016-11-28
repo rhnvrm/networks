@@ -7,7 +7,6 @@ import json
 import shlex
 import subprocess
 
-# MCAST_GRP = '224.1.1.1'
 MCAST_GRP = '230.192.3.255'
 MCAST_PORT = 5432
 
@@ -49,7 +48,7 @@ def iradio(file_name, port):
 		data = f.read(buf)
 		while data:
 			if s.sendto(data, (MCAST_GRP, MCAST_LOCAL_PORT)):
-				print (".")
+				# print (".")
 				data = f.read(buf)
 				time.sleep(sleep)
 

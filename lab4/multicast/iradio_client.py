@@ -2,16 +2,15 @@
 
 import socket
 import struct
-
 import subprocess
 import time
 import threading
 import os
 import sys
 
-# MCAST_GRP = '224.1.1.1' # multicast group to subscribe to
 MCAST_GRP = '230.192.3.255'
-MCAST_PORT = 5432 		# data port of multicast stream 
+MCAST_PORT = 5432 	# data port of multicast stream 
+
 buf = 2048
 
 def iradio(port):
@@ -52,68 +51,21 @@ def iradio(port):
 			# no need to close socket
 			# s.close()
 
+"""
+	while True:
+	# replace with stdin return codes to terminate
+		try:
+  			proc = subprocess.check_output(commands, stderr=subprocess.STDOUT)
+  			# do something with output
+  			print proc
+		except subprocess.CalledProcessError:
+  			print 'There was an error - command exited with non-zero code'
+  			break
 
-	# f = open('client.ts','wb', buf) 
-	# # start reciving data 
-	# data, addr = s.recvfrom(buf)
+  	print 'exiting program'
 
-	# # spawn a thread to start playing the stream at suitable time
-	# # streaming_thread = threading.Thread(target=stream())	
-	# # streaming_thread.start()
-
-
-	# # piping data recived directly to ffplay stdin
-	# commands = ['ffplay', '-']
-	# # pipe sub process output to null
-	# FNULL = open(os.devnull, 'w')
-	# player_process = subprocess.Popen(commands, stdin=subprocess.PIPE, stdout=subprocess.PIPE) #stdout=FNULL)
-	# try: 		
-		# s.settimeout(5)
-	# 	while(data):	
-	# 		player_process.stdin.write(data)
-
-	# 		# f.write(data)
-	# 		# force write data to disk everytime there is a write
-	# 		# f.flush()
-	# 		# os.fsync(f.fileno())
-
-
-	# 		data, addr = s.recvfrom(buf)
-
-	# except socket.timeout:
-	# 	f.close()
-	# 	s.close()
-	# 	print "Song completely buffered"
-
-	# while True:
-	# # replace with stdin return codes to terminate
-	# 	try:
- #  			proc = subprocess.check_output(commands, stderr=subprocess.STDOUT)
- #  			# do something with output
- #  			print proc
-	# 	except subprocess.CalledProcessError:
- #  			print 'There was an error - command exited with non-zero code'
- #  			break
-
- #  	print 'exiting program'
-
- # 	player_process.wait()
-	
-	
-
-# def stream():
-# 	# import os 
-# 	# cons = 2.5*1024*1024
-# 	# size = os.path.getsize('client.ts')
-# 	# while size < cons:
-# 	# 	print "trying"
-# 	# 	time.sleep(2)
-
-# 	print ("new thread spawned")
-# 	print ("sleeping.. for 5 sec")
-# 	time.sleep(5)
-# 	print ("trying to play song")
-# 	subprocess.call(['ffplay', 'client.ts'])
+ 	player_process.wait()
+"""
 
 def main():
 	iradio(MCAST_PORT)
