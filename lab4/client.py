@@ -7,7 +7,8 @@ import json
 import sys
 
 from multiprocessing import Process
-from flask import Flask
+from flask import Flask, jsonify
+
 app = Flask(__name__)
 
 process = None
@@ -40,6 +41,7 @@ def shutdown():
     sys.exit()
     return ('terminating program')
 
+@app.route("/radioinfo")
 def get_radio_info():
     client = Client()
     client.connect(host, port)
@@ -50,7 +52,7 @@ def get_radio_info():
     radio_list = client.recv()
     print ("radio_list recieved")
 
-    return radio_list
+    return jsonify(**radio_list)
 
 
 def print_radio_info(): 
@@ -73,9 +75,9 @@ def play_multicast_radio():
 def main():
 
     print ("Requesting station list from server...")
-    radio_list = get_radio_info()
-    print ("Recieved station list..")
-    print (radio_list)
+    #radio_list = get_radio_info()
+    #print ("Recieved station list..")
+    #print (radio_list)
     global process
     process = Process(target=iradio_client.iradio, args=(udp_port,))
     process.start()

@@ -53,7 +53,7 @@ def main():
     # yet to implement
     # folder_list = music_folder_names()
     
-    for i in range(1, 4):
+    for i in range(1, 6):
     # assuming directory contains 1.ts, 2.ts, etc. from where program is run
         multicast_process = Process(target=iradio_server.iradio, args=(os.path.expanduser(path)+'/{}.ts'.format(i), port,))
         multicast_process.start()

@@ -31,21 +31,33 @@ def file_parser():
 
 def hard_coded():
 	r1 = station_info(1, 99,
-					'RockFM', '224.1.1.1',
-					5007, 5008,
-					99)
+					'PopFM', '224.1.1.1',
+					5432, 6969,
+					len('PopFM'))
 
 	r2 = station_info(2, 99,
-					'PopFM', '224.1.1.1',
-					5009, 5010,
-					99)
+					'ClassicFM', '224.1.1.1',
+					5433, 6969,
+					len('ClassicFM'))	
+	r3 = station_info(3, 99,
+					'RockFM', '224.1.1.1',
+					5434, 6969,
+					len('RockFM'))	
+	r4 = station_info(4, 99,
+					'HindiFM', '224.1.1.1',
+					5435, 6969,
+					len('HindiFM'))	
+	r5 = station_info(4, 99,
+					'Video', '224.1.1.1',
+					5436, 6969,
+					len('Video'))
 
-	all_radio = [r1.__dict__, r2.__dict__]
+	all_radio = [r1.__dict__, r2.__dict__, r3.__dict__, r4.__dict__, r5.__dict__]
 
 	final_object_send = site_info(10, 
-							99,	'SNU\'s internet radio', 
-							99, 'sample descrip',
-							2, all_radio)
+							len('SNU\'s internet radio'),	'SNU\'s internet radio', 
+							len('sample descrip'), 'sample descrip',
+							len(all_radio), all_radio)
 	
 	return final_object_send
 
