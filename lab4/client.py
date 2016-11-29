@@ -5,6 +5,7 @@ import iradio_structs
 import threading
 import json
 import sys
+import os
 
 from multiprocessing import Process
 from flask import Flask, jsonify, render_template, request
@@ -91,6 +92,8 @@ def main():
     global process
     process = Process(target=iradio_client.iradio, args=(udp_port,))
     process.start()
+
+    os.system("google-chrome http://localhost:5000/")
 
     app.run()
 
