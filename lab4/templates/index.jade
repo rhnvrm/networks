@@ -1,0 +1,141 @@
+input#page-toggle-chk(type="checkbox" style="display: none;")
+input#window-toggle-chk(type="checkbox" style="display: none;")
+label(for="window-toggle-chk").start-radio-button Start radio
+.window.load-transition
+    .top-bar.load-transition
+        label.left-action(for="page-toggle-chk")
+            .line.line-1
+            .line.line-2
+            .line.line-3
+        .mid-text
+            .title.page-front-title SNU Radio
+            .title.page-saved-stations-title All stations
+        label.right-action(for="window-toggle-chk")
+            .line.line-1
+            .line.line-2
+            .line.line-3
+    .page.page-front
+        .cover.load-transition.load-transition-delay-1
+            .glow.load-transition.load-transition-delay-2
+            ul.tool-buttons
+                li Play
+                li Pause
+            .current-station-text.load-transition.load-transition-delay-2
+                | 107.2
+            .current-station-name-bar.load-transition.load-transition-delay-2
+                .left-action.fi-rewind
+                .mid-text NRJ radio
+                .right-action.fi-fast-forward
+            .sound-bars
+                .bar.wave-1
+                .bar.wave-2
+                .bar.wave-3
+                .bar.wave-4
+                .bar.wave-5
+                .bar.wave-6
+                .bar.wave-7
+                .bar.wave-8
+                .bar.wave-9
+                .bar.wave-10
+                .bar.wave-1
+                .bar.wave-2
+                .bar.wave-3
+                .bar.wave-4
+                .bar.wave-5
+                .bar.wave-6
+                .bar.wave-7
+                .bar.wave-8
+                .bar.wave-9
+                .bar.wave-10
+                .bar.wave-1
+                .bar.wave-2
+                .bar.wave-3
+                .bar.wave-4
+                .bar.wave-5
+                .bar.wave-6
+                .bar.wave-7
+                .bar.wave-8
+                .bar.wave-9
+                .bar.wave-10
+                .bar.wave-1
+                .bar.wave-2
+                .bar.wave-3
+                .bar.wave-4
+                .bar.wave-5
+                .bar.wave-6
+                .bar.wave-7
+                .bar.wave-8
+                .bar.wave-9
+                .bar.wave-10
+                .bar.wave-1
+                .bar.wave-2
+                .bar.wave-3
+                .bar.wave-4
+                .bar.wave-5
+                .bar.wave-6
+                .bar.wave-7
+                .bar.wave-8
+                .bar.wave-9
+                .bar.wave-10
+        .swipe-bar.load-transition.load-transition-delay-2
+            .range-ruler
+                .point
+                .point
+                .text 90
+                .point.long
+                .point
+                .point
+                .point
+                .point
+                .text 95
+                .point.long.dot
+                .point
+                .point
+                .point
+                .point.dot
+                .text.long 100
+                .point.long
+                .point
+                .point
+                .point
+                .point.dot
+                .text.long 105
+                .point.long
+                .point
+                .point.dot
+                .point
+                .point
+                .text.long 110
+                .point.long
+                .point.dot
+                .point
+                .mid-line
+            input(type="range" value="20" min="1" max="26").range
+        .volume-bar.load-transition.load-transition-delay-2
+            .left-icon.fi-volume-none
+            input(type="range" value="80").range
+    .page.page-saved-stations
+        menu.station-list
+            ul
+                li
+                    a.link Rix FM
+                        span.num 104.8
+                li.active
+                    a.link NRJ radio
+                        .bar-bouncer
+                            .bar.bar1
+                            .bar.bar2
+                            .bar.bar3
+                        span.num 107.2
+                li
+                    a.link Motreal radio
+                        span.num 103.5
+                li 
+                    a.link Soul music
+                        span.num 109.2
+                li 
+                    a.link Rix FM
+                        span.num 105.9
+                li 
+                    a.link Love radio
+                        span.num 96.3

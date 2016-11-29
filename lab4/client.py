@@ -7,7 +7,7 @@ import json
 import sys
 
 from multiprocessing import Process
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ udp_port = sys.argv[2] if len(sys.argv) > 2 else 5432
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return render_template("index.html")
 
 @app.route("/toggle")
 def toggle():
