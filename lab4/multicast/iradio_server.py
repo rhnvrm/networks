@@ -19,7 +19,7 @@ def get_bit_rate_radio(path):
 
 	ffprobeOutput = json.loads(subprocess.check_output(args).decode('utf-8'))
 	
-	return int(ffprobeOutput['streams'][1]['bit_rate'])
+	return int(ffprobeOutput['streams'][0]['bit_rate'])
 
 
 def iradio(file_name, port):

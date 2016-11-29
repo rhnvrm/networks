@@ -12,6 +12,11 @@ MCAST_GRP = '230.192.3.255'
 MCAST_PORT = 5432 	# data port of multicast stream 
 
 buf = 2048
+play = True
+
+def toggle_music():
+	global play
+	play = False if play is True else True
 
 def iradio(port):
 
@@ -43,7 +48,10 @@ def iradio(port):
 	while True:
 		try:
 			data, addr = s.recvfrom(buf)
-			player_process.stdin.write(data)
+			if play is True:
+				player_process.stdin.write(data)
+			else:
+				player_process.stdin.flush()
 			s.settimeout(5)		
 		
 		except socket.timeout:
