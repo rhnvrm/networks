@@ -7,7 +7,7 @@ import json
 import sys
 
 from multiprocessing import Process
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
@@ -53,6 +53,16 @@ def get_radio_info():
     print ("radio_list recieved")
 
     return jsonify(**radio_list)
+
+@app.route("/change")
+def change_radio():
+    global udp_port
+    global process
+    udp_port = request.args.get('port')
+    process.terminate()
+    process = Process(target=iradio_client.iradio, args=(udp_port,))
+    process.start()
+    return "Port changed to "+ udp_port
 
 
 def print_radio_info(): 
